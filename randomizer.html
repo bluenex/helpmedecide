@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Randomizer</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+
+<body>
+
+  <style>
+    .entry:not(:first-of-type) {
+      margin-top: 10px;
+    }
+
+    .control-group {
+      margin-top: 2em;
+      font-size: 20px;
+    }
+
+    .controls {
+      margin-top: 0.5em;
+    }
+  </style>
+
+  <div class="container">
+    <div class="control-group" id="fields">
+      <center>
+        <label class="control-label" for="field1">Let's do the random</label>
+      </center>
+      <div class="controls">
+        <form class="col-sm-offset-3 col-md-offset-3" role="form" autocomplete="off">
+          <div class="entry input-group col-xs-12 col-md-8 col-sm-8">
+            <input class="random-text form-control" name="fields[]" type="text" placeholder="what to random?" />
+            <span class="input-group-btn">
+      <button class="btn btn-success btn-add" type="button">
+      <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            </span>
+          </div>
+        </form>
+        <br>
+        <center>
+          <div class="return-value"></div>
+          <br>
+          <button class="btn btn-primary go-btn" type="button">
+            Random!
+          </button>
+        </center>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+
+  <script>
+    $(document).keypress(function(e) {
+      if (e.which == 13) {
+        e.preventDefault();
+
+        var allChoices = [];
+
+        var counting = $('.random-text').length;
+
+        $('.random-text').each(function() {
+          allChoices.push($(this).val());
+        });
+
+        $('.return-value').html(allChoices[Math.floor(Math.random() * allChoices.length)]);
+      }
+    });
+
+    $(function() {
+      $(document).on('click', '.btn-add', function(e) {
+        e.preventDefault();
+
+        var maxChoices = 6;
+
+        var controlForm = $('.controls form:first'),
+          currentEntry = $(this).parents('.entry:first');
+
+        if ($('.random-text').length < maxChoices) {
+          newEntry = $(currentEntry.clone()).appendTo(controlForm);
+          newEntry.find('input').val('');
+          controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="glyphicon glyphicon-minus"></span>');
+        } else {
+          return;
+        }
+
+        if ($('.random-text').length == maxChoices) {
+          controlForm.find('.entry:last .btn-add')
+            .removeClass('btn-success').addClass('disabled');
+        }
+
+      }).on('click', '.btn-remove', function(e) {
+        $(this).parents('.entry:first').remove();
+
+        $('.btn-add').addClass('btn-success').removeClass('disabled');
+
+        e.preventDefault();
+        return false;
+      });
+    });
+
+
+    $(function() {
+      $(document).on('click', '.go-btn', function(e) {
+        e.preventDefault();
+
+        var allChoices = [];
+
+        var counting = $('.random-text').length;
+
+        $('.random-text').each(function() {
+          allChoices.push($(this).val());
+        });
+
+        $('.return-value').html(allChoices[Math.floor(Math.random() * allChoices.length)]);
+      })
+    })
+  </script>
+</body>
+
+</html>
